@@ -22,6 +22,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult("işlem hatalı");
             }
+
             _colorDal.Add(color);
             return new SuccesResult("işlem başarılı");
           
