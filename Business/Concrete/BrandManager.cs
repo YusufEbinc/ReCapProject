@@ -15,7 +15,7 @@ namespace Business.Concrete
         {
             _brandDal = brandDal;
         }
-        // test 2 eklendi
+  
         public IResult Add(Brand brand)
         {
             if (brand.BrandName.Length < 2)
