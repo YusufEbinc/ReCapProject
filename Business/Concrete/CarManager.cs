@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConserns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -11,28 +14,27 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _carDal;
+      readonly  ICarDal _carDal;
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
         }
-
+        [ValidationAspectAttribute(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.CarName.Length<2)
-            {
-                return new ErrorResult("işlem hatalı");
-            }
+
+            //ValidationTool.Validate(new CarValidaiton(), car);
             _carDal.Add(car);
+            
             return new SuccesResult("işlem başarılı");
+
         }
 
         public IResult Delete(Car car)
         {
-            
             _carDal.Delete(car);
+
             return new SuccesResult("işlem başarılı");
-           
         }
         public IResult Update(Car car)
         {

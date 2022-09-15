@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConserns.Validation;
 using Core.Utilities.Results;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +44,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+      
         [HttpGet("get-brand-id")]
         public IActionResult GetBrandId(int id)
         {
@@ -63,6 +66,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+     
         [HttpGet("get-car-details")]
         public IActionResult GetCarDetails()
         {
@@ -78,6 +82,7 @@ namespace WebAPI.Controllers
         public IActionResult AddCar(Car car)
         {
             var result = _carService.Add(car);
+
             if (result.Succes)
             {
                 return Ok(result);
