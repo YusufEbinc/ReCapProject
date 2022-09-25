@@ -23,7 +23,6 @@ namespace Business.Concrete
         public IResult Add(Car car)
         {
 
-            //ValidationTool.Validate(new CarValidaiton(), car);
             _carDal.Add(car);
             
             return new SuccesResult("işlem başarılı");
