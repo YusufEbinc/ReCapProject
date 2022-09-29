@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Business.ProjectAttribute
 {
-    [AttributeUsage(AttributeTargets.Class |AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
    public class ToTableAttribute:Attribute
     {
         string _tableName;

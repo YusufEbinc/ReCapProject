@@ -28,13 +28,14 @@ namespace Business.Concrete
         [ValidationAspectAttribute(typeof(CarImageValidator))]
         public IResult Add(List<IFormFile> formFile, CarImage carImage)
         {
+            var result = CheckIfImageCount(formFile);
 
-            if (formFile.Count > 5)
+            if (!result)
             {
-                return new ErrorResult("işlem hatalı");
+                return new ErrorResult("en fazla 5 adet resim eklenebilir");
             }
 
-            carImage.ImagePath = _fileHelper.Upload(formFile, PathConstants.GetImagesPath());
+            carImage.ImagePath = _fileHelper.Upload(formFile, PathConstants.imagesPath);
             carImage.Date = DateTime.Now;
             _carImageDal.Add(carImage);
             return new SuccesResult("işlem başarılı");
@@ -50,7 +51,6 @@ namespace Business.Concrete
 
             _fileHelper.Delete(carImage.ImagePath);
             _carImageDal.Delete(carImage);
-
             return new SuccesResult("başarılı işlem");
 
         }
@@ -61,7 +61,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult("hatalı işlem");
             }
-            carImage.ImagePath = _fileHelper.Update(file, PathConstants.GetImagesPath() + carImage.ImagePath,PathConstants.GetImagesPath());
+            carImage.ImagePath = _fileHelper.Update(file, PathConstants.imagesPath + carImage.ImagePath, PathConstants.imagesPath);
             carImage.Date = DateTime.Now;
             _carImageDal.Update(carImage);
             return new SuccesResult("işlem başarılı");
@@ -69,14 +69,40 @@ namespace Business.Concrete
 
         public IDataResult<CarImage> Get(int id)
         {
-            return new SuccesDataResult<CarImage>(_carImageDal.Get(i => i.ImageId == id));
+            var result = _carImageDal.Get(i => i.ImageId == id);
+
+            if (string.IsNullOrEmpty(result.ImagePath))
+            {
+                result.ImagePath = PathConstants.logoImage;
+            }
+            result.ImagePath = PathConstants.Path + result.ImagePath;
+            return new SuccesDataResult<CarImage>(result);
         }
 
         public IDataResult<List<CarImage>> GetAll()
         {
-            return new SuccesDataResult<List<CarImage>>(_carImageDal.GetAll());
+           var result = _carImageDal.GetAll();
+
+            foreach (var item in result)
+            {
+                if (string.IsNullOrEmpty(item.ImagePath))
+                {
+                    item.ImagePath = PathConstants.logoImage;
+                }
+                item.ImagePath = PathConstants.Path + item.ImagePath;
+            }
+
+            return new SuccesDataResult<List<CarImage>>(result);
         }
 
-
+        private bool CheckIfImageCount(List<IFormFile> file)
+        {
+            if (file.Count > 5)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
+

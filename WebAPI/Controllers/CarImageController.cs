@@ -45,6 +45,7 @@ namespace WebAPI.Controllers
         [HttpPost("update")]
         public IActionResult Update([FromForm] List<IFormFile> file, [FromForm] CarImage carImage)
         {
+
             var result = _carImageService.Update(file,carImage);
             if (result.Succes)
             {

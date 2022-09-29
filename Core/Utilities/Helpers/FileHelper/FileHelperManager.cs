@@ -12,6 +12,7 @@ namespace Core.Utilities.Helpers.FileHelper
         public string Upload(List<IFormFile> file, string root)
         {
             StringBuilder builder = new StringBuilder();
+            
 
             if (file.Count > 0)
             {
